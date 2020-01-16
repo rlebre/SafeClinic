@@ -7,9 +7,9 @@ import ieeta.aot.node.NodeSession;
 import ieeta.aot.terminal.Terminal;
 import ieeta.aot.terminal.TerminalSession;
 
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SignatureException;
+import java.security.*;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
 
 public class AOTSimulation {
 
@@ -45,9 +45,11 @@ public class AOTSimulation {
             //TODO: check if "cdata.time" is in acceptable range
 
             // perform a Citizens Card signature check on "cdata.data" using "cdata.extSig"
+
             try {
-                return cc.validateSignature(cdata.data, cdata.extSig.sig, CC.SIGNATURE_KEY_PAIR);
-            } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException e) {
+                PublicKey publicKey = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(cdata.extSig.operKey));
+                return SecurityUtils.validateSignature(cdata.data, cdata.extSig.sig, publicKey);
+            } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException | InvalidKeySpecException e) {
                 return false;
             }
         });
