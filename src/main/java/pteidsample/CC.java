@@ -10,8 +10,8 @@ import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 
 public class CC {
-    static boolean AUTHENTICATION = false;
-    static boolean SIGNATURE = true;
+    static boolean AUTHENTICATION_KEY_PAIR = false;
+    static boolean SIGNATURE_KEY_PAIR = true;
 
     static {
         try {
@@ -33,8 +33,8 @@ public class CC {
 
         this.card = context.getCard();
         this.eidCard = context.getEIDCard();
-        this.authenticationCertificate = getCertificate(CC.AUTHENTICATION);
-        this.signatureCertificate = getCertificate(CC.SIGNATURE);
+        this.authenticationCertificate = getCertificate(CC.AUTHENTICATION_KEY_PAIR);
+        this.signatureCertificate = getCertificate(CC.SIGNATURE_KEY_PAIR);
     }
 
     public static CC getInstance() {
@@ -72,7 +72,7 @@ public class CC {
     }
 
     public boolean validateSignature(byte[] data, byte[] signedData, boolean isSignatureCertificate) throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
-        if (isSignatureCertificate == CC.SIGNATURE) {
+        if (isSignatureCertificate == CC.SIGNATURE_KEY_PAIR) {
             return validateSignature(data, signedData, this.getSignaturePublicKey());
         } else {
             return validateSignature(data, signedData, this.getAuthenticationPublicKey());
