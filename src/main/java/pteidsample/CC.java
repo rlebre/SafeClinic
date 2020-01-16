@@ -66,25 +66,16 @@ public class CC {
         return signedBytes.GetBytes();
     }
 
-
     public boolean validateSignature(String data, byte[] signedData, boolean isSignatureCertificate) throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
         return validateSignature(data.getBytes(), signedData, isSignatureCertificate);
     }
 
     public boolean validateSignature(byte[] data, byte[] signedData, boolean isSignatureCertificate) throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
         if (isSignatureCertificate == CC.SIGNATURE_KEY_PAIR) {
-            return validateSignature(data, signedData, this.getSignaturePublicKey());
+            return SecurityUtils.validateSignature(data, signedData, this.getSignaturePublicKey());
         } else {
-            return validateSignature(data, signedData, this.getAuthenticationPublicKey());
+            return SecurityUtils.validateSignature(data, signedData, this.getAuthenticationPublicKey());
         }
-    }
-
-    public boolean validateSignature(byte[] data, byte[] signedData, PublicKey publicKey) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
-        Signature publicSignature = Signature.getInstance("SHA256withRSA");
-        publicSignature.initVerify(publicKey);
-        publicSignature.update(data);
-
-        return publicSignature.verify(signedData);
     }
 
     public Certificate getSignatureCertificate() {
