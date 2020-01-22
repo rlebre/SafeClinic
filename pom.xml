@@ -37,7 +37,7 @@
         <dependency>
             <groupId>com.github.shumy-tools</groupId>
             <artifactId>aot</artifactId>
-            <version>master-SNAPSHOT</version>
+            <version>master-674e927a75-1</version>
         </dependency>
     </dependencies>
 
